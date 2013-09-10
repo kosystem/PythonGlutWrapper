@@ -3,6 +3,7 @@ from OpenGL.GLUT import *
 from OpenGL.GLU import *
 import sys
 from math import *
+import time
 
 ESCAPE = '\033'
 
@@ -37,6 +38,10 @@ class GlutWrapper(object):
         self.title = "Glut Wrapper"
         self.camera = Camera()
         self.mouseState = MouseState()
+        self.frameElapsed = 0.0
+        self.displayElapsed = 0.0
+        self.elapsedTime = 0.0
+        self.frameTime = 1.0/20.0
 
     def startFramework(self):
         glutInit(sys.argv)
@@ -69,8 +74,7 @@ class GlutWrapper(object):
 
         self.setLights()
         self.setCamera()
-        deltaTime = 0.1
-        self.display(deltaTime)
+        self.display(self.getDisplayElapsed())
 
         glutSwapBuffers()
 
@@ -120,6 +124,22 @@ class GlutWrapper(object):
 
         # glLightModel(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient)
 
+    def getFrameElapsed(self):
+        now = time.time()
+        if self.frameElapsed == 0.0:
+            self.frameElapsed = now
+        elapsed = now - self.frameElapsed
+        self.frameElapsed = now
+        return elapsed
+
+    def getDisplayElapsed(self):
+        now = time.time()
+        if self.displayElapsed == 0.0:
+            self.displayElapsed = now
+        elapsed = now - self.displayElapsed
+        self.displayElapsed = now
+        return elapsed
+
     # User overwite ---------------------------------------
     def display(self, deltaTime):
         glMaterial(GL_FRONT, GL_AMBIENT, (0.8, 0.6, 0.5, 1.0))
@@ -127,8 +147,10 @@ class GlutWrapper(object):
         glutSolidTeapot(50)
 
     def idle(self):
-        # TODO: FPS
-        glutPostRedisplay()
+        self.elapsedTime += self.getFrameElapsed()
+        if self.elapsedTime >= self.frameTime:
+            glutPostRedisplay()
+            self.elapsedTime -= self.frameTime
 
     def reshape(self, w, h):
         glViewport(0, 0, w, h)

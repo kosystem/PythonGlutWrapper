@@ -15,11 +15,13 @@ class GlutViewController(GlutWrapper.GlutWrapper):
 
     def display(self, deltaTime):
         self.drawAxis(10)
-        # self.overlayString("test", 1, 1)
+        if deltaTime > 0.0:
+            fpsString = "FPS: %.1f" % (1.0/deltaTime)
+            self.overlayString(fpsString, 0.1, 0.1)
 
     # User interface -----------------------------------
     def mouse(self, button, state, x, y):
-        print "MousePress: button: %d, x: %d, y:%d" % (button, x, y)
+        # print "MousePress: button: %d, x: %d, y:%d" % (button, x, y)
         self.mouseState.button = button
         self.mouseState.pressed = ~state
         self.mouseState.x = x
@@ -97,7 +99,8 @@ class GlutViewController(GlutWrapper.GlutWrapper):
         glDisable(GL_CULL_FACE)
 
         glRasterPos3f(x, y, 0.0)
-        glutBitmapString(GLUT_BITMAP_HELVETICA_12, string)
+        for x in string:
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, ord(x))
 
         # glPopAttrib()
         # glPopMatrix()
@@ -107,5 +110,6 @@ class GlutViewController(GlutWrapper.GlutWrapper):
 
 
 if __name__ == '__main__':
+    print "Hit ESC key to quit."
     view = GlutViewController()
     view.startFramework()
