@@ -17,7 +17,10 @@ class GlutViewController(GlutWrapper.GlutWrapper):
         self.drawAxis(10)
         if deltaTime > 0.0:
             fpsString = "FPS: %.1f" % (1.0/deltaTime)
-            self.overlayString(fpsString, 0.1, 0.1)
+            self.overlayString(fpsString, 0.0, 0.0)
+        self.overlayString("LB", 0.0, -1.0)
+        self.overlayString("RT", -20.0, 0.0)
+        self.overlayString("RB", -20.0, -1.0)
 
     # User interface -----------------------------------
     def mouse(self, button, state, x, y):
@@ -87,6 +90,17 @@ class GlutViewController(GlutWrapper.GlutWrapper):
         glColor(color)
 
     def overlayString(self, string, x, y, color=(1, 1, 1)):
+        lighting = glGetBoolean(GL_LIGHTING)
+        light0 = glGetBoolean(GL_LIGHT0)
+        light1 = glGetBoolean(GL_LIGHT1)
+
+        currentcolor = glGetFloatv(GL_CURRENT_COLOR)
+        depth = glGetBoolean(GL_DEPTH_TEST)
+        glEnable(GL_DEPTH_TEST)
+        glDisable(GL_LIGHTING)
+        glDisable(GL_LIGHT0)
+        glLineWidth(1.0)
+
         glMatrixMode(GL_PROJECTION)
         # glPushMatrix()
         glLoadIdentity()
@@ -98,7 +112,21 @@ class GlutViewController(GlutWrapper.GlutWrapper):
         glDisable(GL_DEPTH_TEST)
         glDisable(GL_CULL_FACE)
 
-        glRasterPos3f(x, y, 0.0)
+        width = glutGet(GLUT_WINDOW_WIDTH)
+        height = glutGet(GLUT_WINDOW_HEIGHT)
+
+        glColor(color)
+        if x >= 0:
+            positionX = x/width*2.0
+        else:
+            positionX = (width + x)/width*2.0
+
+        if y >= 0:
+            positionY = (y + 10.0)/height*2.0
+        else:
+            positionY = (height + y)/height*2.0
+
+        glRasterPos3f(positionX, positionY, 0.0)
         for x in string:
             glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, ord(x))
 
@@ -107,6 +135,15 @@ class GlutViewController(GlutWrapper.GlutWrapper):
         glMatrixMode(GL_PROJECTION)
         # glPopMatrix()
         glMatrixMode(GL_MODELVIEW)
+        if lighting:
+            glEnable(GL_LIGHTING)
+        if light0:
+            glEnable(GL_LIGHT0)
+        if light1:
+            glEnable(GL_LIGHT1)
+        if not depth:
+            glDisable(GL_DEPTH_TEST)
+        glColor(currentcolor)
 
 
 if __name__ == '__main__':
