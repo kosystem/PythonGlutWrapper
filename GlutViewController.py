@@ -41,9 +41,9 @@ class GlutViewController(GlutWrapper.GlutWrapper):
         if self.mouseState.button == 0 & self.mouseState.pressed:
             self.camera.pan += float(-movedX)/100.0
             self.camera.tilt += float(movedY)/100.0
-        if self.camera.tilt >= math.pi/2.0:
+        if self.camera.tilt > math.pi/2.0:
             self.camera.tilt = math.pi/2.0-0.01
-        if self.camera.tilt <= -math.pi/2.0:
+        if self.camera.tilt < -math.pi/2.0:
             self.camera.tilt = -(math.pi/2.0-0.01)
         self.mouseState.x = x
         self.mouseState.y = y
@@ -52,6 +52,10 @@ class GlutViewController(GlutWrapper.GlutWrapper):
         print "KeyboardPress: %c" % key
         if key == ESCAPE:
             sys.exit()
+        elif key == 'p':
+            self.camera.distance *= 0.875
+        elif key == 'n':
+            self.camera.distance *= 1.125
 
     # Draw ----------------------------------------------
     def drawAxis(self, length):
@@ -144,6 +148,11 @@ class GlutViewController(GlutWrapper.GlutWrapper):
         if not depth:
             glDisable(GL_DEPTH_TEST)
         glColor(currentcolor)
+
+    def setColor(self, color):
+        glColor(color[0], color[1], color[2])
+        glMaterial(GL_FRONT, GL_AMBIENT, color)
+        glMaterial(GL_FRONT, GL_DIFFUSE, color)
 
 
 if __name__ == '__main__':
