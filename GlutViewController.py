@@ -103,6 +103,7 @@ class GlutViewController(GlutWrapper.GlutWrapper):
         glEnable(GL_DEPTH_TEST)
         glDisable(GL_LIGHTING)
         glDisable(GL_LIGHT0)
+        glDisable(GL_LIGHT1)
         glLineWidth(1.0)
 
         glMatrixMode(GL_PROJECTION)
@@ -145,8 +146,8 @@ class GlutViewController(GlutWrapper.GlutWrapper):
             glEnable(GL_LIGHT0)
         if light1:
             glEnable(GL_LIGHT1)
-        if not depth:
-            glDisable(GL_DEPTH_TEST)
+        if depth:
+            glEnable(GL_DEPTH_TEST)
         glColor(currentcolor)
 
     def setColor(self, color):
