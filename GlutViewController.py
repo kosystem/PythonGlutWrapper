@@ -24,7 +24,7 @@ class GlutViewController(GlutWrapper.GlutWrapper):
 
     # User interface -----------------------------------
     def mouse(self, button, state, x, y):
-        # print "MousePress: button: %d, x: %d, y:%d" % (button, x, y)
+        # print("MousePress: button: %d, x: %d, y:%d" % (button, x, y))
         self.mouseState.button = button
         self.mouseState.pressed = ~state
         self.mouseState.x = x
@@ -35,7 +35,7 @@ class GlutViewController(GlutWrapper.GlutWrapper):
             sel.camera.distance *= 1.125
 
     def motion(self, x, y):
-        # print "MouseMove: x: %d, y: %d" % (x, y)
+        # print("MouseMove: x: %d, y: %d" % (x, y))
         movedX = x - self.mouseState.x
         movedY = y - self.mouseState.y
         if self.mouseState.button == 0 & self.mouseState.pressed:
@@ -49,12 +49,12 @@ class GlutViewController(GlutWrapper.GlutWrapper):
         self.mouseState.y = y
 
     def keyboard(self, key, x, y):
-        print "KeyboardPress: %c" % key
-        if key == ESCAPE:
+        print("KeyboardPress: %c" % key.decode('utf-8'))
+        if key == ESCAPE.encode('utf-8'):
             sys.exit()
-        elif key == 'p':
+        elif key == b'p':
             self.camera.distance *= 0.875
-        elif key == 'n':
+        elif key == b'n':
             self.camera.distance *= 1.125
 
     # Draw ----------------------------------------------
@@ -157,6 +157,6 @@ class GlutViewController(GlutWrapper.GlutWrapper):
 
 
 if __name__ == '__main__':
-    print "Hit ESC key to quit."
+    print("Hit ESC key to quit.")
     view = GlutViewController()
     view.startFramework()

@@ -35,7 +35,7 @@ class GlutWrapper(object):
         self.windowHeigth = 480
         self.windowPositionX = 100
         self.windowPositionY = 100
-        self.title = "Glut Wrapper"
+        self.title = b"Glut Wrapper"
         self.camera = Camera()
         self.mouseState = MouseState()
         self.frameElapsed = 0.0
@@ -169,32 +169,37 @@ class GlutWrapper(object):
 
     # User interface -----------------------------------
     def mouse(self, button, state, x, y):
-        print "MousePress: button: %d, x: %d, y:%d" % (button, x, y)
+        #print "MousePress: button: %d, x: %d, y:%d" % (button, x, y)
+        pass
 
     def motion(self, x, y):
-        print "MouseMove: x: %d, y: %d" % (x, y)
+        #print "MouseMove: x: %d, y: %d" % (x, y)
+        pass
 
     def passiveMotion(self, x, y):
         self.mouseState.x = x
         self.mouseState.y = y
 
     def keyboard(self, key, x, y):
-        print "KeyboardPress: %c" % key
+        #print "KeyboardPress: %c" % key
         if key == ESCAPE:
             sys.exit()
 
     def keyboardUp(self, key, x, y):
-        print "KeyboardUp: %c" % key
+        #print "KeyboardUp: %c" % key
+        pass
 
     def special(self, key, x, y):
-        print "SpecialKeyPress: %c" % key
+        #print "SpecialKeyPress: %c" % key
+        pass
 
     def specialUp(self, key, x, y):
-        print "SpecialKeyUp: %c" % key
+        #print "SpecialKeyUp: %c" % key
+        pass
 
 
 if __name__ == '__main__':
-    print "Hit ESC key to quit."
+    #print "Hit ESC key to quit."
     gl = GlutWrapper()
-    gl.title = "Tracer"
+    gl.title = b"Tracer"
     gl.startFramework()
