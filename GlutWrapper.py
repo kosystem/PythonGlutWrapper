@@ -32,7 +32,7 @@ class GlutWrapper(object):
     """docstring for GlutWrapper"""
     def __init__(self):
         self.windowWidth = 640
-        self.windowHeigth = 480
+        self.windowHeight = 480
         self.windowPositionX = 100
         self.windowPositionY = 100
         self.title = b"Glut Wrapper"
@@ -47,7 +47,7 @@ class GlutWrapper(object):
         glutInit(sys.argv)
         glutInitDisplayMode(GLUT_RGB | GLUT_DEPTH)
         glutInitWindowPosition(self.windowPositionX, self.windowPositionY)
-        glutInitWindowSize(self.windowWidth, self.windowHeigth)
+        glutInitWindowSize(self.windowWidth, self.windowHeight)
         glutCreateWindow(self.title)
 
         glutDisplayFunc(self.displayFramework)
