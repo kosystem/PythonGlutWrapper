@@ -197,6 +197,153 @@ class GlutWrapper(object):
         #print "SpecialKeyUp: %c" % key
         pass
 
+    # Basic Draw ----------------------------------------------
+    def drawAxis(self, length):
+        lighting = glGetBoolean(GL_LIGHTING)
+        light0 = glGetBoolean(GL_LIGHT0)
+        light1 = glGetBoolean(GL_LIGHT1)
+
+        color = glGetFloatv(GL_CURRENT_COLOR)
+        depth = glGetBoolean(GL_DEPTH_TEST)
+        glEnable(GL_DEPTH_TEST)
+        glDisable(GL_LIGHTING)
+        glDisable(GL_LIGHT0)
+        glLineWidth(1.0)
+
+        glBegin(GL_LINES)
+        glColor(1.0, 0.0, 0.0, 1.0)
+        glVertex(0.0, 0.0, 0.0)
+        glVertex(length, 0.0, 0.0)
+
+        glColor(0.0, 1.0, 0.0, 1.0)
+        glVertex(0.0,    0.0, 0.0)
+        glVertex(0.0, length, 0.0)
+
+        glColor(0.0, 0.0, 1.0, 1.0)
+        glVertex(0.0, 0.0,    0.0)
+        glVertex(0.0, 0.0, length)
+        glEnd()
+        if lighting:
+            glEnable(GL_LIGHTING)
+        if light0:
+            glEnable(GL_LIGHT0)
+        if light1:
+            glEnable(GL_LIGHT1)
+        if not depth:
+            glDisable(GL_DEPTH_TEST)
+        glColor(color)
+
+    def drawHorizon(self, x, y, xTick, yTick):
+        lighting = glGetBoolean(GL_LIGHTING)
+        light0 = glGetBoolean(GL_LIGHT0)
+        light1 = glGetBoolean(GL_LIGHT1)
+
+        color = glGetFloatv(GL_CURRENT_COLOR)
+        depth = glGetBoolean(GL_DEPTH_TEST)
+        glEnable(GL_DEPTH_TEST)
+        glDisable(GL_LIGHTING)
+        glDisable(GL_LIGHT0)
+        glLineWidth(1.0)
+
+        glBegin(GL_LINES)
+        glColor(0.7, 0.7, 0.7, 1.0)
+        for xi in range(-x, x+xTick, xTick):
+            glVertex(xi, 0.0, -y)
+            glVertex(xi, 0.0, y)
+        for yi in range(-y, y+yTick, yTick):
+            glVertex(-x, 0.0, yi)
+            glVertex(x, 0.0, yi)
+        glEnd()
+
+        if lighting:
+            glEnable(GL_LIGHTING)
+        if light0:
+            glEnable(GL_LIGHT0)
+        if light1:
+            glEnable(GL_LIGHT1)
+        if not depth:
+            glDisable(GL_DEPTH_TEST)
+
+        glColor(color)
+
+    def overlayString(self, string, x, y, color=(1, 1, 1)):
+        lighting = glGetBoolean(GL_LIGHTING)
+        light0 = glGetBoolean(GL_LIGHT0)
+        light1 = glGetBoolean(GL_LIGHT1)
+
+        currentcolor = glGetFloatv(GL_CURRENT_COLOR)
+        depth = glGetBoolean(GL_DEPTH_TEST)
+        glEnable(GL_DEPTH_TEST)
+        glDisable(GL_LIGHTING)
+        glDisable(GL_LIGHT0)
+        glDisable(GL_LIGHT1)
+        glLineWidth(1.0)
+
+        glMatrixMode(GL_PROJECTION)
+        # glPushMatrix()
+        glLoadIdentity()
+        glOrtho(0.0, 2.0, 2.0, 0.0, -1.0, 1.0)
+        glMatrixMode(GL_MODELVIEW)
+        # glPushMatrix()
+        glLoadIdentity()
+        # glPushAttrib(GL_ENABLE_BIT)
+        glDisable(GL_DEPTH_TEST)
+        glDisable(GL_CULL_FACE)
+
+        width = glutGet(GLUT_WINDOW_WIDTH)
+        height = glutGet(GLUT_WINDOW_HEIGHT)/2
+
+        glColor(color)
+        if x >= 0:
+            positionX = x/width*2.0
+        else:
+            positionX = (width + x)/width*2.0
+
+        if y >= 0:
+            positionY = (y + 10.0)/height*2.0
+        else:
+            positionY = (height + y)/height*2.0
+
+        glRasterPos3f(positionX, positionY, 0.0)
+        for x in string:
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_12, ord(x))
+
+        # glPopAttrib()
+        # glPopMatrix()
+        glMatrixMode(GL_PROJECTION)
+        # glPopMatrix()
+        glMatrixMode(GL_MODELVIEW)
+        if lighting:
+            glEnable(GL_LIGHTING)
+        if light0:
+            glEnable(GL_LIGHT0)
+        if light1:
+            glEnable(GL_LIGHT1)
+        if depth:
+            glEnable(GL_DEPTH_TEST)
+        glColor(currentcolor)
+
+    def drawBlock(self, w, h, d):
+        glPushMatrix()
+        glScale(w/100, h/100, d/100 )
+        glutSolidCube(100)
+        glPopMatrix()
+
+    def drawSquer(self, w, h):
+        glPushMatrix()
+        glBegin(GL_QUADS)
+        glVertex(w, h, 0)
+        glVertex(-w, h, 0)
+        glVertex(-w, -h, 0)
+        glVertex(w, -h, 0)
+        glEnd()
+        glPopMatrix()
+
+    def setColor(self, color):
+        glColor(color[0], color[1], color[2])
+        glMaterial(GL_FRONT, GL_AMBIENT, color)
+        glMaterial(GL_FRONT, GL_DIFFUSE, color)
+
 
 if __name__ == '__main__':
     #print "Hit ESC key to quit."
