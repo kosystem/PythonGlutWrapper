@@ -181,20 +181,20 @@ class GlutWrapper(object):
         self.mouseState.y = y
 
     def keyboard(self, key, x, y):
-        #print "KeyboardPress: %c" % key
+        #print "KeyboardPress: %s" % key
         if key == ESCAPE:
             sys.exit()
 
     def keyboardUp(self, key, x, y):
-        #print "KeyboardUp: %c" % key
+        #print "KeyboardUp: %s" % key
         pass
 
     def special(self, key, x, y):
-        #print "SpecialKeyPress: %c" % key
+        #print "SpecialKeyPress: %s" % key
         pass
 
     def specialUp(self, key, x, y):
-        #print "SpecialKeyUp: %c" % key
+        #print "SpecialKeyUp: %s" % key
         pass
 
     # Basic Draw ----------------------------------------------
